@@ -2,76 +2,89 @@ import { createNestFragment, Elements } from "./dom.js";
 
 const { ARTICLE, FORM, FIELDSET, LEGEND, H2, INPUT, DIV, LABEL } = Elements;
 
+let questions = [];
+let index = 0;
+
 const divNodeStructure = (options) => {
-  return options.map((option, index) =>
+  return options.map((option, i) => [
+    DIV, {},
     [
-      DIV, {},
-      [
-        [
-          INPUT, { type: 'radio', id: `option-${index + 1}`, name: 'options' },
-          ''
-        ],
-        [
-          LABEL, { for: `option-${index + 1}` }, `${option}`,
-        ]
-      ]
-    ])
+      [INPUT, { type: 'radio', id: `option-${i + 1}`, name: 'options' }, ''],
+      [LABEL, { for: `option-${i + 1}` }, option]
+    ]
+  ]);
 }
 
-const articleNodeStructure = (divs, questions) =>
+const articleNodeStructure = (divs, question) => [
+  ARTICLE, {},
   [
-    ARTICLE, {},
     [
+      FORM, { action: '#' },
       [
-        FORM, { action: '' },
         [
+          FIELDSET, {},
           [
-            FIELDSET, {},
             [
-              [
-                LEGEND
-                , {},
-                [
-                  [
-                    H2, {}, `${questions.question}`
-                  ]
-                ]
-              ],
-              ...divs,
-              [INPUT, { type: 'submit', value: 'submit' }, '']
-            ]
+              LEGEND, {},
+              [[H2, {}, question.question]]
+            ],
+            ...divs,
+            [INPUT, { type: 'submit', value: 'submit' }, '']
           ]
         ]
       ]
     ]
   ]
+]
 
-const displayQuestions = (questions) => {
-  const section = document.querySelector('section')
-  const divs = divNodeStructure(questions.options)
-  const articleNode = articleNodeStructure(divs, questions)
+const displayQuestion = (question) => {
+  const section = document.querySelector('section');
+
+  const divs = divNodeStructure(question.options);
+  const articleNode = articleNodeStructure(divs, question);
+
   section.append(createNestFragment(...articleNode));
-  console.log(section);
+
+  const form = section.querySelector('form');
+  form.addEventListener('submit', handleSubmit);
+}
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  const section = document.querySelector('section');
+
+  while (section.firstChild) {
+    section.removeChild(section.firstChild);
+  }
+
+  index++;
+
+  if (index < questions.length) {
+    displayQuestion(questions[index]);
+  }
 }
 
 const fetchQuestions = async () => {
-  return [{
-    question: '1.What is the captial of India?',
-    options: ['india', 'pakistan', 'new delhi', 'andhara pradesh']
-  },
-  {
-    question: '2.what is the captial of pakistan?',
-    options: ['india', 'pakistan', 'andhara pradesh', 'agra']
-  },
-  // {
-  //   question: '3.what is the captial of andhra pradesh ?',
-  //   options: ['india', 'pakistan', 'andhara pradesh', 'amaravathi']
-  // }
-  ]
+  return [
+    {
+      question: '1.What is the capital of India?',
+      options: ['india', 'pakistan', 'new delhi', 'andhra pradesh']
+    },
+    {
+      question: '2.What is the capital of Pakistan?',
+      options: ['india', 'pakistan', 'andhra pradesh', 'agra']
+    },
+    {
+      question: '3.What is the capital of Andhra Pradesh?',
+      options: ['india', 'pakistan', 'andhra pradesh', 'amaravathi']
+    }
+  ];
 }
 
-const main = () => {
-  fetchQuestions().then((questions) => questions.map(displayQuestions));
+const main = async () => {
+  questions = await fetchQuestions();
+  displayQuestion(questions[index]);
 }
 
 window.onload = main;
