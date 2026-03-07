@@ -37,27 +37,36 @@ const articleNodeStructure = (divs, question) => [
     ]
   ]
 ]
+const score = (e, quizState) => {
+  const formData = new FormData(e.target);
+  const selectedValue = formData.get("options");
+  quizState.giveScore(selectedValue);
+}
+
+const removeArticle = (section) => {
+  while (section.firstChild) {
+    section.removeChild(section.firstChild);
+  }
+}
+
+const responseOfQue = (quizState) => {
+  if (quizState.isQuizFinish()) {
+    return displayQuestion(quizState.getQuestion(), quizState);
+  }
+  else {
+    console.log(quizState.getScore());
+  }
+}
+
 const listener = (section, quizState) => {
   const form = section.querySelector('form');
   form.addEventListener('submit',
     (e) => {
-      const formData = new FormData(e.target);
-      const selectedValue = formData.get("options");
       e.preventDefault();
-      console.log(quizState)
-      const section = document.querySelector('section');
-
-      while (section.firstChild) {
-        section.removeChild(section.firstChild);
-      }
-      quizState.validateAnswer(selectedValue);
+      score(e, quizState);
+      removeArticle(section);
       quizState.nextQuestion();
-      if (quizState.isQuizFinish()) {
-        displayQuestion(quizState.getQuestion(), quizState);
-      }
-      else {
-        console.log(quizState.getScore());
-      }
+      responseOfQue(quizState);
     }
   );
 }

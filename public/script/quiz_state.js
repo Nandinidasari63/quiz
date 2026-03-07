@@ -15,7 +15,7 @@ export class Quiz {
     this.#quizState.index++;
   }
 
-  validateAnswer(answer) {
+  giveScore(answer) {
     if (this.#quizState.questions[this.#quizState.index].answer === answer) {
       this.#quizState.score++;
     }
