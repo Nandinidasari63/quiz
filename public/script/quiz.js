@@ -8,7 +8,7 @@ const divNodeStructure = (options) => {
   return options.map((option, i) => [
     DIV, {},
     [
-      [INPUT, { type: 'radio', id: `option-${i + 1}`, name: 'options', value: option }, ''],
+      [INPUT, { type: 'radio', id: `option-${i + 1}`, name: 'options', value: option, required: true }, ''],
       [LABEL, { for: `option-${i + 1}` }, option]
     ]
   ]);
