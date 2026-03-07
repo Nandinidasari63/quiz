@@ -1,6 +1,6 @@
 
 export const createNestFragment = (tag, attr, content) => {
-  
+
   const node = document.createElement(tag);
 
   for (const [key, value] of Object.entries(attr)) {
@@ -26,5 +26,6 @@ export const Elements = {
   H2: 'h2',
   INPUT: 'input',
   LABEL: 'label',
-  DIV: 'div'
+  DIV: 'div',
+  H1: 'h1'
 }

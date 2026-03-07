@@ -1,10 +1,8 @@
+import { fetchQuestions } from "./api.js";
 import { createNestFragment, Elements } from "./dom.js";
 import { Quiz } from "./quiz_state.js";
 
-const { ARTICLE, FORM, FIELDSET, LEGEND, H2, INPUT, DIV, LABEL } = Elements;
-
-let questions = [];
-let index = 0;
+const { ARTICLE, FORM, FIELDSET, LEGEND, H2, INPUT, DIV, LABEL, H1 } = Elements;
 
 const divNodeStructure = (options) => {
   return options.map((option, i) => [
@@ -16,27 +14,32 @@ const divNodeStructure = (options) => {
   ]);
 }
 
-const articleNodeStructure = (divs, question) => [
-  ARTICLE, {},
-  [
+const articleNodeStructure = (divs, question, quizState) => {
+
+  const value = quizState.currentQuestionNumber() < quizState.totalQuestions() ? 'Next' : 'Submit';
+  return [
+    ARTICLE, {},
     [
-      FORM, { action: '#' },
       [
+        FORM, {},
         [
-          FIELDSET, {},
           [
+            FIELDSET, {},
             [
-              LEGEND, {},
-              [[H2, {}, question.question]]
-            ],
-            ...divs,
-            [INPUT, { type: 'submit', value: 'submit' }, '']
+              [
+                LEGEND, {},
+                [[H2, {}, question.question]]
+              ],
+              ...divs,
+              [INPUT, { type: 'submit', value: `${value}` }, '']
+            ]
           ]
         ]
       ]
     ]
   ]
-]
+}
+
 const score = (e, quizState) => {
   const formData = new FormData(e.target);
   const selectedValue = formData.get("options");
@@ -49,12 +52,19 @@ const removeArticle = (section) => {
   }
 }
 
-const responseOfQue = (quizState) => {
+const responseOfQue = (section, quizState) => {
   if (quizState.isQuizFinish()) {
     return displayQuestion(quizState.getQuestion(), quizState);
   }
   else {
-    console.log(quizState.getScore());
+    const finalMessage = [
+      DIV, { class: 'score' }, [
+        [
+          H1, {}, `your final Score is ${quizState.getScore()}`
+        ]
+      ]
+    ]
+    section.append(createNestFragment(...finalMessage));
   }
 }
 
@@ -66,42 +76,23 @@ const listener = (section, quizState) => {
       score(e, quizState);
       removeArticle(section);
       quizState.nextQuestion();
-      responseOfQue(quizState);
+      responseOfQue(section, quizState);
     }
   );
 }
+
 const displayQuestion = (question, quizState) => {
   const section = document.querySelector('section');
 
   const divs = divNodeStructure(question.options);
-  const articleNode = articleNodeStructure(divs, question);
+  const articleNode = articleNodeStructure(divs, question, quizState);
 
   section.append(createNestFragment(...articleNode));
   listener(section, quizState)
 }
-const fetchQuestions = async () => {
-  return [
-    {
-      question: '1.What is the capital of India?',
-      options: ['india', 'pakistan', 'new delhi', 'andhra pradesh'],
-      answer: 'india',
-    },
-    {
-      question: '2.What is the capital of Pakistan?',
-      options: ['india', 'pakistan', 'andhra pradesh', 'agra'],
-      answer: 'pakistan'
-
-    },
-    {
-      question: '3.What is the capital of Andhra Pradesh?',
-      options: ['india', 'pakistan', 'andhra pradesh', 'amaravathi'],
-      answer: 'amaravathi'
-    }
-  ];
-}
 
 const main = async () => {
-  questions = await fetchQuestions();
+  const questions = await fetchQuestions();
   const quizState = new Quiz(questions);
   displayQuestion(quizState.getQuestion(), quizState);
 }

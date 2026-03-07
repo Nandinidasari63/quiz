@@ -1,0 +1,27 @@
+[
+  {
+    "question": "1. What is the capital of India?",
+    "options": ["Mumbai", "Kolkata", "New Delhi", "Chennai"],
+    "answer": "New Delhi"
+  },
+  {
+    "question": "2. What is the capital of Pakistan?",
+    "options": ["Karachi", "Lahore", "Islamabad", "Peshawar"],
+    "answer": "Islamabad"
+  },
+  {
+    "question": "3. What is the capital of Andhra Pradesh?",
+    "options": ["Hyderabad", "Vijayawada", "Amaravathi", "Visakhapatnam"],
+    "answer": "Amaravathi"
+  },
+  {
+    "question": "4. What is the capital of Telangana?",
+    "options": ["Warangal", "Hyderabad", "Karimnagar", "Nizamabad"],
+    "answer": "Hyderabad"
+  },
+  {
+    "question": "5. What is the capital of Karnataka?",
+    "options": ["Mysuru", "Hubli", "Bengaluru", "Mangalore"],
+    "answer": "Bengaluru"
+  }
+]

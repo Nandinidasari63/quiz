@@ -29,4 +29,12 @@ export class Quiz {
     return this.#quizState.score;
   }
 
+  totalQuestions() {
+    return this.#quizState.questions.length;
+  }
+
+  currentQuestionNumber() {
+    return this.#quizState.index + 1;
+  }
+
 }
