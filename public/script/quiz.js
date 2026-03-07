@@ -2,7 +2,7 @@ import { fetchQuestions } from "./api.js";
 import { createNestFragment, Elements } from "./dom.js";
 import { Quiz } from "./quiz_state.js";
 
-const { ARTICLE, FORM, FIELDSET, LEGEND, H2, INPUT, DIV, LABEL, H1 } = Elements;
+const { ARTICLE, FORM, FIELDSET, LEGEND, H2, INPUT, DIV, LABEL, H1,P } = Elements;
 
 const divNodeStructure = (options) => {
   return options.map((option, i) => [
@@ -20,6 +20,10 @@ const articleNodeStructure = (divs, question, quizState) => {
   return [
     ARTICLE, {},
     [
+      [
+        P, { id: "question-Num" }, `question Number : ${quizState.currentQuestionNumber()} / ${quizState.totalQuestions()} `
+      ],
+
       [
         FORM, {},
         [

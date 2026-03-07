@@ -27,5 +27,6 @@ export const Elements = {
   INPUT: 'input',
   LABEL: 'label',
   DIV: 'div',
-  H1: 'h1'
+  H1: 'h1',
+  P: 'p'
 }
