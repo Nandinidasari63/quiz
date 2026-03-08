@@ -2,14 +2,14 @@ import { fetchQuestions } from "./api.js";
 import { createNestFragment, Elements } from "./dom.js";
 import { Quiz } from "./quiz_state.js";
 
-const { ARTICLE, FORM, FIELDSET, LEGEND, H2, INPUT, DIV, LABEL, H1,P } = Elements;
+const { ARTICLE, FORM, FIELDSET, LEGEND, H2, INPUT, DIV, LABEL, H1, P } = Elements;
 
 const divNodeStructure = (options) => {
   return options.map((option, i) => [
     DIV, {},
     [
       [INPUT, { type: 'radio', id: `option-${i + 1}`, name: 'options', value: option, required: true }, ''],
-      [LABEL, { for: `option-${i + 1}` }, option]
+      [LABEL, { for: `option-${i + 1}`, class: 'options' }, option]
     ]
   ]);
 }
@@ -32,10 +32,16 @@ const articleNodeStructure = (divs, question, quizState) => {
             [
               [
                 LEGEND, {},
-                [[H2, {}, question.question]]
+                [[H1, {}, question.question]]
               ],
               ...divs,
-              [INPUT, { type: 'submit', value: `${value}` }, '']
+
+              [DIV, { class: 'button' }, [
+                [
+                  INPUT, { type: 'submit', value: `${value}`, id: 'btn' }, ''
+                ]
+              ]
+              ]
             ]
           ]
         ]
