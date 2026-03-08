@@ -1,4 +1,4 @@
-import { fetchQuestions } from "./api.js";
+import { fetchQuestions, submitAnswers } from "./api.js";
 import { createNestFragment, Elements } from "./dom.js";
 import { Quiz } from "./quiz_state.js";
 
@@ -50,10 +50,10 @@ const articleNodeStructure = (divs, question, quizState) => {
   ]
 }
 
-const score = (e, quizState) => {
+const storeAnswer = (e, quizState) => {
   const formData = new FormData(e.target);
   const selectedValue = formData.get("options");
-  quizState.giveScore(selectedValue);
+  quizState.storeResponse(selectedValue);
 }
 
 const removeArticle = (section) => {
@@ -62,15 +62,17 @@ const removeArticle = (section) => {
   }
 }
 
-const responseOfQue = (section, quizState) => {
+const responseOfQue = async (section, quizState) => {
   if (quizState.isQuizFinish()) {
     return displayQuestion(quizState.getQuestion(), quizState);
   }
   else {
+
+    const result = await submitAnswers(quizState.getResponses());
     const finalMessage = [
       DIV, { class: 'score' }, [
         [
-          H1, {}, `your final Score is ${quizState.getScore()}`
+          H1, {}, `your final Score is ${result.score} / ${result.total}`
         ]
       ]
     ]
@@ -81,15 +83,16 @@ const responseOfQue = (section, quizState) => {
 const listener = (section, quizState) => {
   const form = section.querySelector('form');
   form.addEventListener('submit',
-    (e) => {
+    async (e) => {
       e.preventDefault();
-      score(e, quizState);
       removeArticle(section);
+      storeAnswer(e, quizState);
       quizState.nextQuestion();
-      responseOfQue(section, quizState);
+      await responseOfQue(section, quizState);
     }
   );
 }
+
 
 const displayQuestion = (question, quizState) => {
   const section = document.querySelector('section');

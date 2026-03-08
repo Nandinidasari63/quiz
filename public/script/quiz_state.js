@@ -5,6 +5,7 @@ export class Quiz {
     this.#quizState.questions = questions;
     this.#quizState.index = 0;
     this.#quizState.score = 0;
+    this.#quizState.answers = [];
   }
 
   getQuestion() {
@@ -15,18 +16,12 @@ export class Quiz {
     this.#quizState.index++;
   }
 
-  giveScore(answer) {
-    if (this.#quizState.questions[this.#quizState.index].answer === answer) {
-      this.#quizState.score++;
-    }
+  storeResponse(answer) {
+    this.#quizState.answers.push(answer);
   }
 
   isQuizFinish() {
     return this.#quizState.index < this.#quizState.questions.length
-  }
-
-  getScore() {
-    return this.#quizState.score;
   }
 
   totalQuestions() {
@@ -37,4 +32,7 @@ export class Quiz {
     return this.#quizState.index + 1;
   }
 
+  getResponses() {
+    return this.#quizState.answers;
+  }
 }
