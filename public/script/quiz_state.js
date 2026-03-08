@@ -4,7 +4,6 @@ export class Quiz {
     this.#quizState = {};
     this.#quizState.questions = questions;
     this.#quizState.index = 0;
-    this.#quizState.score = 0;
     this.#quizState.answers = [];
   }
 
