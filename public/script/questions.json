@@ -23,5 +23,30 @@
     "question": "5. What is the capital of Karnataka?",
     "options": ["Mysuru", "Hubli", "Bengaluru", "Mangalore"],
     "answer": "Bengaluru"
+  },
+  {
+    "question": "6. What is the capital of Tamil Nadu?",
+    "options": ["Madurai", "Chennai", "Coimbatore", "Salem"],
+    "answer": "Chennai"
+  },
+  {
+    "question": "7. What is the capital of Maharashtra?",
+    "options": ["Pune", "Nagpur", "Mumbai", "Nashik"],
+    "answer": "Mumbai"
+  },
+  {
+    "question": "8. What is the capital of Gujarat?",
+    "options": ["Ahmedabad", "Surat", "Rajkot", "Gandhinagar"],
+    "answer": "Gandhinagar"
+  },
+  {
+    "question": "9. What is the capital of Rajasthan?",
+    "options": ["Udaipur", "Jaipur", "Jodhpur", "Bikaner"],
+    "answer": "Jaipur"
+  },
+  {
+    "question": "10. What is the capital of West Bengal?",
+    "options": ["Kolkata", "Darjeeling", "Howrah", "Siliguri"],
+    "answer": "Kolkata"
   }
 ]
