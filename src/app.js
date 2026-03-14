@@ -1,6 +1,6 @@
 import { serveStatic } from "hono/deno";
 import { logger } from "hono/logger";
-import { calculateScore, getQuestions } from "./quiz_backend.js";
+import { calculateScore, getQuestions } from "./quiz_service.js";
 
 export const registerRoutes = (app) => {
   app.use(logger());
