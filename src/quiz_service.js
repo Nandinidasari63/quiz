@@ -1,9 +1,9 @@
-export const getQuestions = async (c) => {
+export const fetchQuestions = async (c) => {
   const data = await Deno.readTextFile("data/questions.json");
   return c.json(JSON.parse(data));
 };
 
-export const calculateScore = async (c) => {
+export const submitQuiz = async (c) => {
   const body = await c.req.json();
   const userAnswers = body.answers;
   const data = await Deno.readTextFile("data/questions.json");
