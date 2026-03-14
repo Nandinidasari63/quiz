@@ -1,6 +1,6 @@
 import { fetchQuestions, submitAnswers } from "./api.js";
 import { Quiz } from "./quiz_state.js";
-import { renderQuestion, renderScore, clearSection } from "./renderer.js";
+import { clearSection, renderQuestion, renderScore } from "./renderer.js";
 
 const storeAnswer = (e, quizState) => {
   const formData = new FormData(e.target);
@@ -28,15 +28,13 @@ const handleSubmit = async (e, section, quizState) => {
 const attachListener = (section, quizState) => {
   const form = section.querySelector("form");
 
-  form.addEventListener("submit", (e) =>
-    handleSubmit(e, section, quizState)
-  );
+  form.addEventListener("submit", (e) => handleSubmit(e, section, quizState));
 };
 
-export const startQuiz = async (section) => {
+export const startQuiz = async (mainNode) => {
   const questions = await fetchQuestions();
   const quizState = new Quiz(questions);
 
-  renderQuestion(section, quizState.getQuestion(), quizState);
-  attachListener(section, quizState);
+  renderQuestion(mainNode, quizState.getQuestion(), quizState);
+  // attachListener(questionTemplate, quizState);
 };

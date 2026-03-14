@@ -1,18 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz</title>
-  <link rel="stylesheet" href="/style/style.css">
-  <script type="module" src="/script/main.js"></script>
+  <link rel="stylesheet" href="/style/style.css" />
+  <script type="module" src="/script/quiz.js"></script>
 </head>
 
 <body>
   <main>
-    <section>
-    </section>
+    <template class="question-template">
+      <article>
+        <p class="question-num"></p>
+        <form>
+          <fieldset>
+            <legend>
+              <h1 class="question-text"></h1>
+            </legend>
+          </fieldset>
+        </form>
+      </article>
+    </template>
+    <template class="options-template">
+      <div>
+        <input type="radio" name="options" required="true" />
+        <label class="options"></label>
+      </div>
+    </template>
+    <template class="submit-btn">
+      <div class="button">
+        <input type="submit" id="btn" />
+      </div>
+    </template>
   </main>
 </body>
 
