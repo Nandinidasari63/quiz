@@ -11,6 +11,5 @@ export const submitAnswers = async (answers) => {
     },
     body: JSON.stringify({ answers })
   });
-
   return response.json();
 }

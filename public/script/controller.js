@@ -1,40 +1,36 @@
 import { fetchQuestions, submitAnswers } from "./api.js";
 import { Quiz } from "./quiz_state.js";
-import { clearSection, renderQuestion, renderScore } from "./renderer.js";
+import { removeCurrentQuestion, renderQuestion, renderScore } from "./renderer.js";
 
-const storeAnswer = (e, quizState) => {
-  const formData = new FormData(e.target);
-  const answer = formData.get("options");
+const saveAnswer = (e, quizState) => {
+  const form = e.target;
+  const selected = form.querySelector('input[name="options"]:checked');
+  const answer = selected.value;
   quizState.storeResponse(answer);
 };
 
-const handleSubmit = async (e, section, quizState) => {
-  e.preventDefault();
 
-  storeAnswer(e, quizState);
-  clearSection(section);
+const attachSubmitListener = (mainNode, quizState) => {
+  const form = mainNode.querySelector('form');
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    saveAnswer(e, quizState);
+    removeCurrentQuestion(mainNode);
+    quizState.nextQuestion();
 
-  quizState.nextQuestion();
-
-  if (quizState.isQuizFinish()) {
-    renderQuestion(section, quizState.getQuestion(), quizState);
-    attachListener(section, quizState);
-  } else {
-    const result = await submitAnswers(quizState.getResponses());
-    renderScore(section, result);
-  }
-};
-
-const attachListener = (section, quizState) => {
-  const form = section.querySelector("form");
-
-  form.addEventListener("submit", (e) => handleSubmit(e, section, quizState));
+    if (quizState.hasMoreQuestions()) {
+      renderQuestion(mainNode, quizState.getQuestion(), quizState);
+      attachSubmitListener(mainNode, quizState);
+    } else {
+      const result = await submitAnswers(quizState.getResponses());
+      renderScore(mainNode, result);
+    }
+  });
 };
 
 export const startQuiz = async (mainNode) => {
   const questions = await fetchQuestions();
   const quizState = new Quiz(questions);
-
   renderQuestion(mainNode, quizState.getQuestion(), quizState);
-  // attachListener(questionTemplate, quizState);
+  attachSubmitListener(mainNode, quizState);
 };

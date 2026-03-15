@@ -19,7 +19,7 @@ export class Quiz {
     this.#quizState.answers.push(answer);
   }
 
-  isQuizFinish() {
+  hasMoreQuestions() {
     return this.#quizState.index < this.#quizState.questions.length
   }
 

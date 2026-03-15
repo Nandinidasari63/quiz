@@ -4,51 +4,56 @@ const setQuestionAndNumber = (questionNode, quizState, { question }) => {
   questionNode.querySelector(".question-text").textContent = question;
 };
 
-const appendOptions = ({ options }, formNode) => {
+const appendOptions = (optionsTemplate, { options }, formNode) => {
   options.forEach((option, index) => {
-    const optionsTemplate = document.querySelector('.options-template')
-    const clonedOptions = optionsTemplate.content.cloneNode(true);
     const id = `option-${index + 1}`;
-    clonedOptions.querySelector("input").setAttribute('id', id);
-    const label = clonedOptions.querySelector('.options')
+    const clonedOptions = optionsTemplate.content.cloneNode(true);
+    const input = clonedOptions.querySelector("input");
+    input.setAttribute('id', id);
+    input.setAttribute('value', option);
+    const label = clonedOptions.querySelector('.options');
     label.setAttribute('for', id);
     label.textContent = option;
     formNode.append(clonedOptions);
   });
 }
 
-const addSubmitButton = (formNode, quizState) => {
-  const submitBtn = document.querySelector('.submit-btn').content.cloneNode(true);
+const addSubmitButton = (clonedSubmit, formNode, quizState) => {
   const value =
     quizState.currentQuestionNumber() < quizState.totalQuestions()
       ? "Next"
       : "Submit";
-  submitBtn.querySelector('input').setAttribute('value', value);
-  formNode.append(submitBtn);
+  clonedSubmit.querySelector('input').setAttribute('value', value);
+  formNode.append(clonedSubmit);
 }
 
 export const renderQuestion = (mainNode, question, quizState) => {
-  const questionTemplate = document.querySelector('.question-template');
-  const clonedQuestion = questionTemplate.content.cloneNode(true);
+  const templates = {
+    question: document.querySelector(".question-template"),
+    options: document.querySelector(".options-template"),
+    submit: document.querySelector(".submit-btn")
+  };
+
+  const clonedQuestion = templates.question.content.cloneNode(true);
+  const optionsTemplate = templates.options
+  const clonedSubmit = templates.submit.content.cloneNode(true);
+
   setQuestionAndNumber(clonedQuestion, quizState, question);
   const formNode = clonedQuestion.querySelector('form')
-  appendOptions(question, formNode)
-  addSubmitButton(formNode, quizState);
+  appendOptions(optionsTemplate, question, formNode)
+  addSubmitButton(clonedSubmit, formNode, quizState);
   mainNode.append(clonedQuestion);
 };
 
-export const renderScore = (section, result) => {
-  const scoreNode = [
-    DIV,
-    { class: "score" },
-    [[H1, {}, `Your final score is ${result.score} / ${result.total}`]],
-  ];
-
-  section.append(createNestFragment(...scoreNode));
+export const renderScore = (mainNode, result) => {
+  const scoreTemplate = document.querySelector(".score-template");
+  const scoreNode = scoreTemplate.content.cloneNode(true);
+  const score = `Your final score is ${result.score} / ${result.total}`
+  scoreNode.querySelector('.score').textContent = score;
+  mainNode.append(scoreNode);
 };
 
-export const clearSection = (section) => {
-  while (section.firstChild) {
-    section.removeChild(section.firstChild);
-  }
-};
+export const removeCurrentQuestion = (mainNode) => {
+  mainNode.querySelector('article').remove();
+
+}
